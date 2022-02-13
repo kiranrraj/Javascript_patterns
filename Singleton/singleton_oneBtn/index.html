@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JavaScript Patterns</title>
+    <style>
+        .container{
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .value, 
+        .plus, 
+        .minus{
+            padding: 10px 20px;
+            font-size: 20px;
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="block">
+            <button class="plus">+</button>
+            <span class="value"></span>
+            <button class="minus">-</button>
+        </div>
+    </div>
+    <script type="module">
+        import valueSingleton from './singleton.js';
+
+        let plus = document.querySelector('.plus');
+        let minus = document.querySelector('.minus');
+        let val = document.getElementsByClassName('value')[0];
+        val.textContent = valueSingleton.getValue();
+
+        plus.addEventListener( 'click', () => {
+            valueSingleton.incrementValue();
+            val.textContent = valueSingleton.getValue();
+        } );
+        minus.addEventListener( 'click', () => {
+            valueSingleton.decrementValue();
+            val.textContent = valueSingleton.getValue();
+        } );
+
+        
+    </script>
+</body>
+</html>

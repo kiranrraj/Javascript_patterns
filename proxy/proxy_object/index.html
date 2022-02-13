@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JavaScript Patterns: Proxy Pattern</title>
+    <style>
+      .container {
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .block {
+        width: 300px;
+        flex-direction: column;
+        display: flex;
+        background: #ddd;
+        padding: 40px;
+      }
+
+      button {
+        margin-top: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="inputBlock block">
+        <label for="name">Enter your name</label>
+        <input type="text" id="name" class="name" />
+        <br />
+        <label for="age">Enter your age</label>
+        <input type="number" id="age" class="age" />
+        <button type="button" class="btnName">Submit Name</button>
+        <button type="button" class="btnAge">Submit Age</button>
+      </div>
+      <div class="outputBlock block">
+        <p class="user">User Details</p>
+        <p class="msg"></p>
+      </div>
+    </div>
+    <script>
+      const userDetails = document.querySelector(".user");
+      const msg = document.querySelector(".msg");
+
+      const user = {
+        name: "Kiran raj r",
+        age: 33,
+      };
+
+      const proxyUser = new Proxy(user, {
+        get: (obj, prop) => {
+          if (!obj[prop]) {
+            msg.textContent = `No property with name ${prop} in object ${obj}`;
+          } else {
+            msg.textContent = `The value of property (${prop}) is ${obj[prop]}`;
+          }
+        },
+
+        set: (obj, prop, value) => {
+          if (
+            (prop === "name" && value === undefined) ||
+            (prop === "name" && value.length <= 2)
+          ) {
+            msg.textContent = `Please enter a valid name.`;
+          } else if (prop === "age" && parseInt(value) === "NaN") {
+            msg.textContent = `Please enter a numeric value`;
+          } else {
+            msg.textContent = `Changed Property (${prop}) from ${obj[prop]} to ${value}.`;
+            obj[prop] = value;
+          }
+        },
+      });
+
+      const btnName = document.querySelector(".btnName");
+      const btnAge = document.querySelector(".btnAge");
+      userDetails.textContent = `Current User: Name: ${user.name} / Age: ${user.age}`;
+
+      btnName.addEventListener("click", () => {
+        proxyUser.name = document.querySelector(".name").value;
+        userDetails.textContent = `Current User: Name: ${user.name} / Age: ${user.age}`;
+      });
+
+      btnAge.addEventListener("click", () => {
+        proxyUser.age = document.querySelector(".age").value;
+        userDetails.textContent = `Current User: Name: ${user.name} / Age: ${user.age}`;
+      });
+    </script>
+  </body>
+</html>
